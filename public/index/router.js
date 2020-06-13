@@ -9,6 +9,11 @@ import wdsc from './wdsc.vue';
 import serchgoods from './serchgoods.vue';
 import xqgoods from './xqgoods.vue';
 
+import edtgoods from './subtemplate/edtgoods.vue';
+
+import addgoods from './subtemplate/addgoods.vue';
+import history from './subtemplate/goodshistory.vue';
+
 var router =  new vueRouter({
     routes : [
         {path : '/', redirect : '/essc'},
@@ -16,7 +21,16 @@ var router =  new vueRouter({
         {path : '/essc', component : essc},
         {path : '/gwc', component : gwc},
         {path : '/wddd', component : wddd},
-        {path : '/wdsc', component : wdsc},
+        {
+            path : '/wdsc',
+            component : wdsc,
+            children : [
+                {path:'/wdsc', redirect:'/wdsc/history'},
+                {path : '/wdsc/addgoods', component:addgoods},
+                {path : '/wdsc/history', component:history},
+                {path : '/wdsc/edtgoods', component : edtgoods}
+            ]
+        },
         {path : '/serchgoods', component : serchgoods},
         {path : '/xqgoods', component : xqgoods}
     ]

@@ -252,7 +252,7 @@ router.get('/api/indexdata',function (req, res) {
 //获取搜索页面商品数据
 router.get('/api/serch',function (req, res) {
     var resm = {status:1,message:'查找成功!',data:[]};
-    db.querydb("select * from goods where title like '%"+req.query.serch+"%'")
+    db.querydb("select * from goods where title like '%"+req.query.serch+"%' and status != '停售'")
         .then(function (result) {
             resm.data = result;
             res.send(resm);
@@ -448,9 +448,10 @@ router.post('/pai/updatecar', function (req, res) {
     for (var key in req.body){
         if (key == 'id')
             continue;
-        sql = sql + ' '+key+'=?';
+        sql = sql + ' '+key+'=?,';
         post.push(req.body[key]);
     }
+    sql = sql.substring(0,sql.length-1);
     sql = sql + ' where id = ?';
     post.push(req.body.id);
     db.updatedb(sql,post)
@@ -465,7 +466,6 @@ router.post('/pai/updatecar', function (req, res) {
             }
         })
         .catch(function (err) {
-            console.log(err);
             resm.status = 0;
             resm.message = '修改失败!';
             res.send(resm);
@@ -580,5 +580,132 @@ router.post('/api/updingdan', function (req, res) {
             res.send(resm);
         });
 });
+
+//处理用户传输的商品图片
+router.post('/api/yangping',function (req, res) {
+    var form = new formidable.IncomingForm();
+    form.encoding = 'utf-8';
+    form.uploadDir = "./public/goodsimage";
+    form.keepExtensions = true;//保留后缀
+    form.maxFieldsSize = 20 * 1024 * 1024;
+    //处理图片
+    form.parse(req, function (err, fields, files) {
+        var resm = {status:1,message:'上传图片成功!',path:''};
+        if (err){
+            resm.status = 0;
+            resm.message = '上传图片失败!';
+            return res.send(JSON.stringify(resm));
+        }
+        resm.path = files.yangping.path;
+        res.send(JSON.stringify(resm));
+    });
+});
+//用户提交新商品
+router.post('/api/addgoods', function (req, res) {
+    var xinxi = req.body;
+    var resm = {status:0,message:''};//定义返回的数据
+    //数据校验
+    if (xinxi.title == '' || xinxi.nowprice == '' || xinxi.number == ''){
+        resm.message = '标题不能为空或价格、数量必须大于0!';
+        return res.send(resm);
+    }
+    if (xinxi.discription.length > 250){
+        resm.message = '商品描述最多250字!';
+        return res.send(resm);
+    }
+    if (xinxi.images.length < 1){
+        resm.message = '至少传入一张图片!';
+        return res.send(resm);
+    }
+    //校验成功则将数据添加到数据库
+    db.updatedb('insert into goods set ?', xinxi)
+        .then(function (result) {
+            if (result.affectedRows == 1){
+                resm.status = 1;
+                resm.message = '商品展示成功!';
+                res.send(resm);
+            }
+            else {
+                resm.status = 0;
+                resm.message = '商品展示失败!';
+                res.send(resm);
+            }
+        })
+        .catch(function (err) {
+            resm.status = 0;
+            resm.message = '商品展示失败!';
+            res.send(resm);
+        });
+});
+//用户访问自己的商品
+router.get('/api/querygoods', function (req, res) {
+    var resm = {status:1,message:'查找成功',data:[]};
+    db.querydb('select * from goods where userzhanghu = '+req.query.userzhanghu)
+        .then(function (result) {
+            resm.data = result;
+            res.send(resm);
+        })
+        .catch(function (err) {
+            resm.status = 0;
+            resm.message = '查找失败';
+            res.send(resm);
+        });
+});
+//修改自己的商品的信息
+router.post('/api/uspategoods', function (req, res) {
+    var resm = {status:0,message:''};
+    var xinxi = req.body;
+    //检查数据的正确性
+    if (xinxi.title && xinxi.title==''){
+        resm.message = '标题不能为空!';
+        return res.send(resm);
+    }
+    if (xinxi.nowprice && xinxi.nowprice<=0){
+        resm.message = '价格必须大于等于0!';
+        return res.send(resm);
+    }
+    if (xinxi.images && xinxi.images==''){
+        resm.message = '至少上传一张图片!';
+        return res.send(resm);
+    }
+    if (xinxi.number && xinxi.number<=0){
+        resm.message = '数量至少为一!';
+        return res.send(resm);
+    }
+    if (xinxi.status && xinxi.status==''){
+        resm.message = '销售状态不能为空!';
+        return res.send(resm);
+    }
+    //处理数据
+    var sql = 'update goods set';
+    var post = [];
+    for (var key in xinxi){
+        if (key == 'id')
+            continue
+        sql = sql + ' '+key+'=?,';
+        post.push(req.body[key]);
+    }
+    sql = sql.substring(0,sql.length-1);
+    sql = sql + ' where id = ?';
+    post.push(req.body.id);
+    //修改数据库
+    db.updatedb(sql,post)
+        .then(function (result) {
+            if (result.affectedRows == 1){
+                resm.status = 1;
+                resm.message = '修改成功!';
+                res.send(resm);
+            }
+            else{
+                resm.message = '修改失败!';
+                res.send(resm);
+            }
+        })
+        .catch(function (err) {
+            resm.message = '修改失败!';
+            res.send(resm);
+        });
+});
+
 //将router导出
 module.exports = router;

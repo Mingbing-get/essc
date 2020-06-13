@@ -68,6 +68,7 @@ export default {
                     //获取购物车数量
                     return this.$http.get('/api/carcount?userzhanghu='+res.data.user.zhanghu);
                 }
+                localStorage.setItem('isdenglu',false);
             })
             .then(function (result) {
                 if (result.data.status == 1){
