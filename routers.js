@@ -238,7 +238,7 @@ router.get('/api/lunbo',function (req, res) {
 //获取首页商品数据
 router.get('/api/indexdata',function (req, res) {
     var resm = {status:1,message:'查找成功!',data:[]};
-   db.querydb("select * from goods where status in ('特价','热卖','精选')")
+   db.querydb("select * from goods where status not in ('停售','出售')")
        .then(function (result) {
             resm.data = result;
             res.send(resm);

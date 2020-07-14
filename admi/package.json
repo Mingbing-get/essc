@@ -1,0 +1,34 @@
+{
+  "name": "admi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "css-loader": "^3.5.3",
+    "element-ui": "^2.13.2",
+    "jquery": "^3.5.1",
+    "less": "^3.11.1",
+    "less-loader": "^6.1.0",
+    "mui": "0.0.1",
+    "popper.js": "^1.16.1",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.2",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.3.2",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.4.0",
+    "webpack": "^4.43.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.11"
+  }
+}

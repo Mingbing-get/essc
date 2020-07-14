@@ -56,7 +56,7 @@ exports.updatedb = function (sql, post) {
 
 //插入数据
 // var post = {zhanghu:'143',mima:'123',name:'张三',sex:'男',birthday:new Date(),touxiang:'13'};
-// var sql = 'insert into users set ?';
+// var sql = 'insert into users.vue set ?';
 // db.query(sql,post,(err,result)=>{
 //   if (err)
 //      console.log(err);
@@ -65,7 +65,7 @@ exports.updatedb = function (sql, post) {
 // });
 
 //查询数据
-//  var sql = 'select * from users';
+//  var sql = 'select * from users.vue';
 //  db.query(sql, (err, result)=>{
 //     if (err)
 //        console.log(err);
@@ -74,7 +74,7 @@ exports.updatedb = function (sql, post) {
 //  });
 
 //修改数据
-// var sql = 'update users set name = ? where zhanghu = ?';
+// var sql = 'update users.vue set name = ? where zhanghu = ?';
 // var post = ['张三','123'];
 // db.query(sql,post,(err,result)=>{
 //   if (err)
@@ -84,7 +84,7 @@ exports.updatedb = function (sql, post) {
 // });
 
 //删除数据
-// var sql = 'delete from users where zhanghu=?';
+// var sql = 'delete from users.vue where zhanghu=?';
 // var post = ['143'];
 // db.query(sql, post, (err,result)=>{
 //    if (err)
@@ -96,27 +96,27 @@ exports.updatedb = function (sql, post) {
 
 //使用方法
 // db = require("./db.js");
-// db.querydb("select * from users where zhanghu='123'")
+// db.querydb("select * from users.vue where zhanghu='123'")
 //     .then(function (result) {
 //         console.log(result);
-//         return db.updatedb("delete from users where zhanghu='123'");
+//         return db.updatedb("delete from users.vue where zhanghu='123'");
 //     })
 //     .then(function (result) {
 //         console.log(result);
-//         return db.updatedb('insert into users  set ?',
+//         return db.updatedb('insert into users.vue  set ?',
 //             {zhanghu:'143',mima:'123',name:'张三',sex:'男',birthday:new Date(),touxiang:'13'});
 //     })
 //     .then(function (result) {
 //         console.log(result);
-//         return db.querydb("select * from users");
+//         return db.querydb("select * from users.vue");
 //     })
 //     .then(function (result) {
 //         console.log(result);
-//         return db.updatedb('update users set name=? where zhanghu=?',['李四','143']);
+//         return db.updatedb('update users.vue set name=? where zhanghu=?',['李四','143']);
 //     })
 //     .then(function (result) {
 //         console.log(result);
-//         return db.querydb("select * from users");
+//         return db.querydb("select * from users.vue");
 //     })
 //     .then(function (result) {
 //         console.log(result);
